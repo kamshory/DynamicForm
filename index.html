@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Dynamic Form</title>
+<script type="text/javascript" src="script/jquery/jquery.min.js"></script>
+<script type="text/javascript">
+function initRootLocation(selector)
+{
+	var thisObj = $(selector);
+	var parentValue = thisObj.attr('data-parent-value') || '';
+	var url = thisObj.attr('data-url') || '';
+	var value = thisObj.attr('data-value') || '';
+	var bind = ((thisObj.attr('data-bind-children') || 'false') == 'true')?true:false;
+	var children = thisObj.attr('data-children-selector') || '';
+	$.ajax({
+		url:url,
+		type:'GET',
+		data:{term:parentValue},
+		dataType:"json",
+		success: function(result){
+			thisObj.empty().append('<option value="">- Select One -</option>\r\n');
+			var i, j;
+			for(i in result)
+			{
+				thisObj.append('<option value="'+result[i].v+'">'+result[i].l+'</option>\r\n');
+			}
+			thisObj.val(value);
+			if(bind && children != '')
+			{
+				$(children).attr('data-parent-value', value);
+				initRootLocation(children);
+			}
+		}
+	});
+	try
+	{
+		thisObj.off('change');
+	}
+	catch(exc)
+	{
+	}
+	thisObj.on('change', function(evt){
+		value = $(this).val();
+		$(this).attr('data-value', value);
+		if(bind && children != '')
+		{
+			$(children).attr('data-parent-value', value);
+			initRootLocation(children);
+		}
+	});
+	
+}
+$(document).ready(function(e) {
+    initRootLocation($('select[name="propinsi"]'));
+});
+</script>
+</head>
+
+<body>
+<form name="form1" method="post" action="">
+  <table width="100%" border="0" cellspacing="0" cellpadding="5">
+    <tr>
+      <td width="160">Nama</td>
+      <td><label>
+        <input type="text" name="nama">
+      </label></td>
+    </tr>
+    <tr>
+      <td>Alamat</td>
+      <td><input type="text" name="alamat"></td>
+    </tr>
+    <tr>
+      <td>Proponsi</td>
+      <td><select name="propinsi" data-url="../kkn-baru/tools/ajax-select-propinsi.php" data-value="" data-bind-children="true" data-children-selector="select[name='kabupatenkota']"></select></td>
+    </tr>
+    <tr>
+      <td>Kota</td>
+      <td><select name="kabupatenkota" data-url="../kkn-baru/tools/ajax-select-kabupatenkota.php" data-value="" data-bind-children="true" data-children-selector="select[name='kecamatan']"></select></td>
+    </tr>
+    <tr>
+      <td>Kecamatan</td>
+      <td><select name="kecamatan" data-url="../kkn-baru/tools/ajax-select-kecamatan.php" data-value="" data-bind-children="true" data-children-selector="select[name='kelurahan']"></select></td>
+    </tr>
+    <tr>
+      <td>Kelurahan</td>
+      <td><select name="kelurahan" data-url="../kkn-baru/tools/ajax-select-kelurahan.php" data-value=""></select></td>
+    </tr>
+    <tr>
+      <td>Kode Pos</td>
+      <td><label>
+        <input type="number" name="kodepos">
+      </label></td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td><input type="submit" name="submit" id="submit" value="Submit"></td>
+    </tr>
+  </table>
+</form>
+</body>
+</html>
