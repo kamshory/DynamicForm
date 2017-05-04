@@ -15,6 +15,6 @@ data-url berisi URL dari data untuk elemen tersebut.
 
 data-value berisi nilai dari elemen saat ini. Hal ini disebabkan karena elemen select tidak harus berisi option
 
-data-bind-children berisi nilai "true" atau "false". Jika diisi dengan "true", maka ketika elemen ini selesai diinisialisasi atau ketika nilai elemen ini diubah dengan event "change", maka elemen children akan diinisialisasi kembali dengan menggunakan nilai terakhir dari elemen ini.
+data-bind-children berisi nilai "true" atau "false". Jika diisi dengan "true", maka ketika elemen ini selesai diinisialisasi atau ketika nilai elemen ini diubah dengan event "change", elemen children akan diinisialisasi kembali dengan menggunakan nilai terakhir dari elemen ini.
 
 data-children-selector adalah selector dari elemen children. Selector dapat berupa tag, id, class, atribut, dan pseudoclass.
